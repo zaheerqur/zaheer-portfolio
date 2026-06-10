@@ -1,0 +1,560 @@
+import { useState, useEffect, useRef } from 'react'
+import profileImg from './assets/profile.jpg'
+import ssmsImg from './assets/ssms.png'
+
+/* ── Icons ─────────────────────────────────────────────────────────── */
+const LinkedInIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+  </svg>
+)
+
+const GitHubIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+  </svg>
+)
+
+const EmailIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="4" width="20" height="16" rx="0"/>
+    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+  </svg>
+)
+
+const PhoneIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.28h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.13 6.13l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+  </svg>
+)
+
+const ArrowUpRight = () => (
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="7" y1="17" x2="17" y2="7"/>
+    <polyline points="7 7 17 7 17 17"/>
+  </svg>
+)
+
+/* ── useFadeUp hook ─────────────────────────────────────────────────── */
+function useFadeUp() {
+  const ref = useRef(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { el.classList.add('visible'); obs.unobserve(el) } },
+      { threshold: 0.1 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+  return ref
+}
+
+/* ── Nav ─────────────────────────────────────────────────────────────── */
+function Nav() {
+  const [solid, setSolid] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setSolid(window.scrollY > 40)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+
+  return (
+    <nav className={`nav${solid ? ' nav--solid' : ''}`}>
+      <ul className="nav__links">
+        {['about', 'experience', 'projects', 'technologies', 'contact'].map(s => (
+          <li key={s}>
+            <button onClick={() => scrollTo(s)}>
+              {s.charAt(0).toUpperCase() + s.slice(1)}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+/* ── Hero + About (merged) ───────────────────────────────────────────── */
+function HeroAbout() {
+  const bioRef = useFadeUp()
+  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+
+  return (
+    <section className="hero-about" id="about">
+      <div className="hero-about__inner">
+
+        {/* Left column */}
+        <div className="hero-about__left">
+          <div className="hero__eyebrow">
+            <span className="hero__eyebrow-line" />
+            <span className="hero__eyebrow-text">Hello, I am</span>
+          </div>
+
+          <h1 className="hero__name">
+            Zaheer<br />Quraishi
+          </h1>
+
+          <div className="hero__divider" />
+
+          <div className="hero__role-row">
+            <span className="hero__role">Software Developer</span>
+          </div>
+
+          <div className="hero-about__bio fade-up" ref={bioRef}>
+            <p className="about__bio">
+              Software Engineering grad from Concordia, currently at MHI RJ Aviation building production systems in C#, .NET, and React that real teams depend on. I find the most value sitting between the business problem and the technical solution, understanding what's actually needed before deciding what to build.
+            </p>
+            <p className="about__bio about__bio--second">
+              Alongside that, I've built Python and ML systems including a self-retraining Premier League match predictor and a live emotion recognition model deployed to production. Outside of that I play video games, follow football, and have a soft spot for Liverpool.
+            </p>
+          </div>
+
+          <div className="hero__actions">
+            <a href="/zaheer-cv.pdf" download className="btn btn--earth">Download CV</a>
+            <button onClick={() => scrollTo('contact')} className="btn btn--outline">Contact Info</button>
+          </div>
+
+          <div className="hero__social">
+            <a href="https://linkedin.com/in/zaheer-quraishi-399390186" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <LinkedInIcon />
+            </a>
+            <a href="https://github.com/zaheerqur" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <GitHubIcon />
+            </a>
+          </div>
+        </div>
+
+        {/* Right column */}
+        <div className="hero-about__right">
+          <div className="hero__photo">
+            <img src={profileImg} alt="Zaheer Quraishi" />
+          </div>
+          <div className="hero-about__stats">
+            <div className="about__stat">
+              <span className="about__stat-value">1+</span>
+              <span className="about__stat-label">Years Experience</span>
+              <span className="about__stat-sub">Software Development</span>
+            </div>
+            <div className="about__stat-divider" />
+            <div className="about__stat">
+              <span className="about__stat-value">B.Eng.</span>
+              <span className="about__stat-label">Software Engineering</span>
+              <span className="about__stat-sub">Concordia University</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  )
+}
+
+/* ── Experience ──────────────────────────────────────────────────────── */
+const ChevronDown = ({ flipped }) => (
+  <svg
+    width="12" height="12" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+    style={{ transform: flipped ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }}
+  >
+    <polyline points="6 9 12 15 18 9" />
+  </svg>
+)
+
+const EXPERIENCES = [
+  {
+    company: 'MHI RJ Aviation',
+    role: 'IT Developer Intern',
+    period: 'May 2025 - Present',
+    lead: 'Building and maintaining production systems used daily across the org - from requirements through to release.',
+    body: 'I built Sentinel, a real-time React 19 dashboard aggregating 20+ Azure DevOps repositories for engineering leadership, secured with MSAL and role-based access. I own the RFSA compliance module in SupplierDB, a Transport Canada-regulated supplier ERP supporting 100+ inspectors across 500+ global aerospace suppliers. I also maintain DMSApp, a 1.7 million-record document management system, diagnosing indexing failures and handling QA cycles and production fixes across legacy Windows Forms and ASP.NET MVC codebases.',
+    tags: ['React 19', 'TypeScript', 'C#', '.NET', 'ASP.NET MVC', 'ADO.NET', 'Azure', 'MSAL', 'SQL', 'Windows Forms'],
+    bullets: [
+      'Eliminated manual repository monitoring for engineering leadership by building a real-time React 19 / TypeScript dashboard aggregating 20+ Azure DevOps repositories into a single view, secured via Azure AD / MSAL with role-based access control.',
+      "Closed a critical audit traceability gap in MHI's Transport Canada-regulated supplier ERP by delivering a net-new compliance module end-to-end in C# / .NET, supporting 100+ quality inspectors across 500+ global aerospace suppliers.",
+      'Diagnosed and resolved a recurring indexing failure in a 1.7 million-record document management system utilizing Azure Cognitive Search and SQL where newly onboarded organizations lost document retrieval access, tracing the root cause through free-form trigger analysis and iterative testing with no existing playbook to follow.',
+      'Kept mission-critical aviation systems continuously operational by maintaining a multi-release deployment cycle across legacy Windows Forms and modern ASP.NET MVC codebases, driving features from requirements through QA and production hotfixes.',
+    ],
+  },
+  {
+    company: 'BG Communications',
+    role: 'Full-Stack Developer',
+    period: 'Sep 2024 - Apr 2025',
+    lead: 'Built a full payroll platform replacement from scratch - modernizing a desktop-bound system into a deployable web application.',
+    body: 'I migrated a legacy SQL schema to a normalized relational model, writing custom transformation scripts to move historical payroll and financial records without losing data integrity. I built the replacement system end to end: a Java / Spring Boot backend containerized with Docker and a Vue.js frontend. I covered critical payroll and business logic with Selenium end-to-end test suites in Python and JUnit unit tests before each release.',
+    tags: ['Java', 'Spring Boot', 'Vue.js', 'Docker', 'Python', 'Selenium', 'JUnit', 'SQL'],
+    bullets: [
+      'Untangled and migrated a problematic legacy SQL schema to a normalized relational model, writing custom transformation scripts to move historical payroll and financial records without losing data integrity across a non-trivial structural overhaul.',
+      'Built the full replacement system from the ground up: a Java / Spring Boot backend containerized with Docker and a Vue.js frontend, modernizing a desktop-bound payroll platform into a deployable web application.',
+      'Covered critical payroll and business logic with automated end-to-end Selenium test suites in Python and structural JUnit unit tests, ensuring correctness before each release on a system handling real financial records.',
+    ],
+  },
+]
+
+function ExperienceCard({ data }) {
+  const ref = useFadeUp()
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    <div className="experience__card fade-up" ref={ref}>
+      <div className="experience__top">
+        <div>
+          <h3 className="experience__company">{data.company}</h3>
+          <p className="experience__role">{data.role}</p>
+        </div>
+        <span className="experience__year">{data.period}</span>
+      </div>
+
+      <div className="experience__narrative">
+        <p className="experience__lead">{data.lead}</p>
+        <p className="experience__body">{data.body}</p>
+      </div>
+
+      <div className="skill-tags">
+        {data.tags.map(s => <span key={s} className="skill-tag">{s}</span>)}
+      </div>
+
+      <div className={`experience__expand${expanded ? ' experience__expand--open' : ''}`}>
+        <ul className="experience__bullets">
+          {data.bullets.map((b, i) => <li key={i}>{b}</li>)}
+        </ul>
+      </div>
+
+      <button className="experience__toggle" onClick={() => setExpanded(e => !e)}>
+        {expanded ? 'Show less' : 'Show more'}
+        <ChevronDown flipped={expanded} />
+      </button>
+    </div>
+  )
+}
+
+function Experience() {
+  return (
+    <section className="section experience" id="experience">
+      <div className="section__inner">
+
+        <div className="section__header">
+          <div className="section__eyebrow">
+            <span className="section__eyebrow-num">01</span>
+            <span className="section__eyebrow-rule" style={{ background: 'rgba(252,248,240,0.12)' }} />
+            <span className="section__eyebrow-label">Explore My</span>
+          </div>
+          <h2 className="section__title">Experience</h2>
+        </div>
+
+        <div className="experience__cards">
+          {EXPERIENCES.map(exp => <ExperienceCard key={exp.company} data={exp} />)}
+        </div>
+
+      </div>
+    </section>
+  )
+}
+
+/* ── Technologies ────────────────────────────────────────────────────── */
+const DI = p => `https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${p}.svg`
+const SI = s => `https://cdn.simpleicons.org/${s}`
+
+const TECH_STACK = [
+  {
+    category: 'Languages',
+    items: [
+      { name: 'C#',         src: DI('csharp/csharp-original') },
+      { name: 'TypeScript', src: DI('typescript/typescript-original') },
+      { name: 'JavaScript', src: DI('javascript/javascript-original') },
+      { name: 'Python',     src: DI('python/python-original') },
+      { name: 'Java',       src: DI('java/java-original') },
+      { name: 'SQL',        src: DI('microsoftsqlserver/microsoftsqlserver-plain') },
+      { name: 'HTML / CSS', src: DI('html5/html5-original') },
+    ],
+  },
+  {
+    category: 'Frameworks',
+    items: [
+      { name: 'React',        src: DI('react/react-original') },
+      { name: '.NET',         src: DI('dotnetcore/dotnetcore-original') },
+      { name: 'Spring Boot',  src: DI('spring/spring-original') },
+      { name: 'Vue.js',       src: DI('vuejs/vuejs-original') },
+      { name: 'Next.js',      src: DI('nextjs/nextjs-original') },
+      { name: 'Tailwind CSS', src: DI('tailwindcss/tailwindcss-original') },
+      { name: 'PyTorch',      src: DI('pytorch/pytorch-original') },
+      { name: 'Scikit-learn', src: SI('scikitlearn') },
+      { name: 'pandas',       src: SI('pandas') },
+      { name: 'FastAPI',      src: SI('fastapi') },
+      { name: 'Flask',        src: DI('flask/flask-original') },
+      { name: 'Selenium',     src: DI('selenium/selenium-original') },
+    ],
+  },
+  {
+    category: 'Cloud & Platforms',
+    items: [
+      { name: 'Azure',    src: DI('azure/azure-original') },
+      { name: 'Firebase', src: DI('firebase/firebase-original') },
+      { name: 'Netlify',  src: SI('netlify') },
+      { name: 'Render',   src: SI('render') },
+      { name: 'Docker',   src: DI('docker/docker-original') },
+    ],
+  },
+  {
+    category: 'Tools',
+    items: [
+      { name: 'Git',           src: DI('git/git-original') },
+      { name: 'GitHub',         src: DI('github/github-original') },
+      { name: 'GitHub Actions', src: SI('githubactions') },
+      { name: 'VS Code',       src: DI('vscode/vscode-original') },
+      { name: 'Visual Studio', src: DI('visualstudio/visualstudio-plain') },
+      { name: 'IntelliJ IDEA', src: DI('intellij/intellij-original') },
+      { name: 'JIRA',          src: DI('jira/jira-original') },
+      { name: 'Confluence',    src: DI('confluence/confluence-original') },
+      { name: 'SSMS',          src: ssmsImg },
+    ],
+  },
+  {
+    category: 'Testing',
+    items: [
+      { name: 'Jest',                  src: DI('jest/jest-plain') },
+      { name: 'JUnit',                 src: SI('junit5') },
+      { name: 'React Testing Library', src: SI('testinglibrary') },
+    ],
+  },
+]
+
+function TechBubble({ name, src }) {
+  const [failed, setFailed] = useState(false)
+
+  return (
+    <div className="tech-bubble">
+      <div className="tech-bubble__circle">
+        {src && !failed
+          ? <img
+              src={src}
+              alt={name}
+              width="34"
+              height="34"
+              onError={() => setFailed(true)}
+            />
+          : <span className="tech-bubble__fallback">
+              {name.replace(/[^A-Za-z0-9]/g, '').slice(0, 3).toUpperCase()}
+            </span>
+        }
+      </div>
+      <span className="tech-bubble__name">{name}</span>
+    </div>
+  )
+}
+
+function Technologies() {
+  const ref = useFadeUp()
+
+  return (
+    <section className="section technologies" id="technologies">
+      <div className="section__inner">
+
+        <div className="section__header">
+          <div className="section__eyebrow">
+            <span className="section__eyebrow-num">03</span>
+            <span className="section__eyebrow-rule" />
+            <span className="section__eyebrow-label">What I Work With</span>
+          </div>
+          <h2 className="section__title">Technologies</h2>
+        </div>
+
+        <div className="tech-categories fade-up" ref={ref}>
+          {TECH_STACK.map(group => (
+            <div key={group.category} className="tech-category">
+              <p className="tech-category__label">{group.category}</p>
+              <div className="tech-category__bubbles">
+                {group.items.map(item => (
+                  <TechBubble key={item.name} name={item.name} src={item.src} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </section>
+  )
+}
+
+/* ── Projects ────────────────────────────────────────────────────────── */
+const PROJECTS = [
+  {
+    name: 'EPL Predictor',
+    description: 'Self-sustaining MLOps pipeline trained on 4,180 Premier League matches across 11 seasons, serving calibrated win/draw/loss probabilities via FastAPI. Achieves 45.3% accuracy on a held-out 2025-26 validation season and auto-retrains twice weekly via GitHub Actions.',
+    tech: ['Python', 'scikit-learn', 'FastAPI', 'Docker', 'Vue.js', 'GitHub Actions', 'Render', 'Netlify'],
+    github: 'https://github.com/zaheerqur/epl-predictor',
+    demo: 'https://ml-epl-prediction.netlify.app',
+    accent: '#6D28D9',
+  },
+  {
+    name: 'Emotion Recognition App',
+    description: '3-layer CNN trained from scratch on 35,000+ FER2013 images and exported to ONNX, cutting the production footprint by 90% for lightweight inference. Served via a Flask API with a live Netlify frontend featuring a sample grid and real-time classification.',
+    tech: ['Python', 'PyTorch', 'ONNX', 'Flask', 'React'],
+    github: 'https://github.com/zaheerqur/COMP472_Emotion_Recognition',
+    demo: 'https://comp-472-cnn.netlify.app/',
+    accent: '#F07840',
+  },
+  {
+    name: 'CondoConnect',
+    description: 'Full-stack condo management platform with multi-role RBAC, conflict-aware facility reservations, and financial reporting. Includes a 52-file Jest / React Testing Library suite covering 68 backend functions across the Firebase data layer.',
+    tech: ['React 18', 'Firebase', 'Jest', 'EmailJS', 'Google Maps API'],
+    github: 'https://github.com/zaheerqur/Mini-Capstone',
+    demo: null,
+    accent: '#1C8C6E',
+  },
+  {
+    name: 'Truly',
+    description: 'Full-stack career services platform with role-based access for employers, candidates, and admins. Resume upload via Cloudinary, session-based auth, and separate CI/CD pipelines for frontend and backend through GitHub Actions.',
+    tech: ['Vue.js', 'Node.js', 'Express.js', 'MongoDB', 'Cloudinary', 'Jest', 'GitHub Actions'],
+    github: 'https://github.com/zaheerqur/Truly',
+    demo: null,
+    accent: '#2563EB',
+  },
+]
+
+function ProjectCard({ project, index, delay }) {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { el.classList.add('visible'); obs.unobserve(el) } },
+      { threshold: 0.08 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  return (
+    <div className="project-card fade-up" ref={ref} style={{ transitionDelay: `${delay}ms` }}>
+      <div className="project-card__accent" style={{ background: project.accent }} />
+      <div className="project-card__body">
+        <span className="project-card__num">0{index + 1}</span>
+        <h3 className="project-card__name">{project.name}</h3>
+        <div className="project-card__rule" />
+        <p className="project-card__desc">{project.description}</p>
+        <div className="tech-tags">
+          {project.tech.map(t => <span key={t} className="tech-tag">{t}</span>)}
+        </div>
+      </div>
+      <div className="project-card__actions">
+        {project.github && (
+          <a href={project.github} target="_blank" rel="noopener noreferrer" className="btn--sm btn--sm-outline-dark">
+            GitHub <ArrowUpRight />
+          </a>
+        )}
+        {project.demo && (
+          <a href={project.demo} target="_blank" rel="noopener noreferrer" className="btn--sm btn--sm-coral-light">
+            Live Demo <ArrowUpRight />
+          </a>
+        )}
+        {!project.github && !project.demo && (
+          <span className="project-card__internal">Internal / In Progress</span>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function Projects() {
+  return (
+    <section className="section projects" id="projects">
+      <div className="section__inner">
+
+        <div className="section__header">
+          <div className="section__eyebrow">
+            <span className="section__eyebrow-num">02</span>
+            <span className="section__eyebrow-rule" />
+            <span className="section__eyebrow-label">Browse My Recent</span>
+          </div>
+          <h2 className="section__title">Projects</h2>
+        </div>
+
+        <div className="projects__grid">
+          {PROJECTS.map((p, i) => (
+            <ProjectCard key={p.name} project={p} index={i} delay={i * 70} />
+          ))}
+        </div>
+
+      </div>
+    </section>
+  )
+}
+
+/* ── Contact ─────────────────────────────────────────────────────────── */
+function Contact() {
+  const ref = useFadeUp()
+
+  return (
+    <section className="section contact" id="contact">
+      <div className="section__inner">
+
+        <div className="section__header">
+          <div className="section__eyebrow">
+            <span className="section__eyebrow-num">04</span>
+            <span className="section__eyebrow-rule" />
+            <span className="section__eyebrow-label">Get in Touch</span>
+          </div>
+          <h2 className="section__title">Contact Me</h2>
+        </div>
+
+        <div className="fade-up" ref={ref}>
+          <div className="contact__grid">
+            <a href="tel:+15149537474" className="contact__item">
+              <span className="contact__item-label">Phone</span>
+              <span className="contact__item-value">
+                <PhoneIcon />
+                (+1) 514-953-7474
+              </span>
+            </a>
+            <a href="mailto:zaheerqur1811@gmail.com" className="contact__item">
+              <span className="contact__item-label">Email</span>
+              <span className="contact__item-value">
+                <EmailIcon />
+                zaheerqur1811@gmail.com
+              </span>
+            </a>
+            <a href="https://linkedin.com/in/zaheer-quraishi-399390186" target="_blank" rel="noopener noreferrer" className="contact__item">
+              <span className="contact__item-label">LinkedIn</span>
+              <span className="contact__item-value">
+                <LinkedInIcon />
+                Zaheer Quraishi
+              </span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  )
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────── */
+function Footer() {
+  return (
+    <footer className="footer">
+      <p>© 2026 Zaheer Quraishi</p>
+      <span className="footer__right">Made with intention ♥</span>
+    </footer>
+  )
+}
+
+/* ── App ─────────────────────────────────────────────────────────────── */
+export default function App() {
+  return (
+    <>
+      <Nav />
+      <HeroAbout />
+      <Experience />
+      <Projects />
+      <Technologies />
+      <Contact />
+      <Footer />
+    </>
+  )
+}
