@@ -189,7 +189,7 @@ ul { list-style: none; }
 }
 
 .hero-about__bio {
-  margin: 36px 0 48px;
+  margin: 20px 0 48px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 32px;
@@ -207,8 +207,6 @@ ul { list-style: none; }
   grid-template-columns: 1fr auto 1fr;
   align-items: start;
   padding: 28px 0;
-  border-top: 1px solid var(--ink-08);
-  border-bottom: 1px solid var(--ink-08);
 }
 
 .hero__eyebrow {
@@ -639,6 +637,7 @@ ul { list-style: none; }
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+  justify-content: center;
 }
 
 .tech-bubble {
@@ -943,12 +942,40 @@ ul { list-style: none; }
 @media (max-width: 900px) {
   .hero-about__inner {
     grid-template-columns: 1fr;
-    padding: 110px 0 72px;
-    gap: 0;
+    padding: 110px 0 64px;
+    gap: 32px;
   }
-  .hero-about__right { display: none; }
   .hero-about__bio { grid-template-columns: 1fr; gap: 16px; margin: 28px 0 40px; }
   .hero-about::after { display: none; }
+
+  .hero-about__right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 28px;
+    padding-top: 28px;
+    padding-bottom: 0;
+    border-top: 1px solid var(--ink-08);
+  }
+
+  .hero__photo::before { display: none; }
+  .hero__photo img {
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  .hero-about__stats {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: none;
+    padding: 0;
+  }
+
+  .about__stat-divider { display: none; }
+  .about__stat { padding: 0; }
+  .about__stat-value { font-size: 2rem; }
 }
 
 @media (max-width: 768px) {
@@ -959,8 +986,10 @@ ul { list-style: none; }
   .nav__hamburger { display: flex; }
 
   .hero-about { padding: 0 var(--pad); }
-  .hero-about__inner { padding: 96px 0 56px; }
+  .hero-about__inner { padding: 96px 0 48px; }
   .hero__name { margin-bottom: 20px; }
+  .hero-about__right { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .hero__photo img { width: 80px !important; height: 80px !important; }
 
   .section { padding: 72px var(--pad); }
   .section__header { margin-bottom: 48px; }
