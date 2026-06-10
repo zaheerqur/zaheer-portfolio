@@ -54,17 +54,18 @@ function useFadeUp() {
 /* ── Nav ─────────────────────────────────────────────────────────────── */
 function Nav() {
   const [solid, setSolid] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setSolid(window.scrollY > 40)
+    const onScroll = () => { setSolid(window.scrollY > 40); setMenuOpen(false) }
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  const scrollTo = (id) => { document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }); setMenuOpen(false) }
 
   return (
-    <nav className={`nav${solid ? ' nav--solid' : ''}`}>
+    <nav className={`nav${solid || menuOpen ? ' nav--solid' : ''}`}>
       <ul className="nav__links">
         {['about', 'experience', 'projects', 'technologies', 'contact'].map(s => (
           <li key={s}>
@@ -74,6 +75,22 @@ function Nav() {
           </li>
         ))}
       </ul>
+
+      <button className="nav__hamburger" onClick={() => setMenuOpen(m => !m)} aria-label="Menu">
+        <span className={menuOpen ? 'open' : ''} />
+        <span className={menuOpen ? 'open' : ''} />
+        <span className={menuOpen ? 'open' : ''} />
+      </button>
+
+      {menuOpen && (
+        <div className="nav__mobile">
+          {['about', 'experience', 'projects', 'technologies', 'contact'].map(s => (
+            <button key={s} onClick={() => scrollTo(s)}>
+              {s.charAt(0).toUpperCase() + s.slice(1)}
+            </button>
+          ))}
+        </div>
+      )}
     </nav>
   )
 }
