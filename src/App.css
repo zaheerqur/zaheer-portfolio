@@ -699,7 +699,7 @@ ul { list-style: none; }
   transition: background 0.2s;
 }
 
-.project-card:nth-child(3n) { border-right: none; }
+.project-card:last-child:not(:nth-child(3n)) { border-right: none; }
 
 .project-card:hover { background: var(--accent-08); }
 
@@ -934,7 +934,6 @@ ul { list-style: none; }
 @media (max-width: 1180px) {
   :root { --pad: 32px; }
   .projects__grid { grid-template-columns: repeat(2, 1fr); }
-  .project-card:nth-child(3n) { border-right: 1px solid var(--ink-08); }
   .project-card:nth-child(2n) { border-right: none; }
 }
 

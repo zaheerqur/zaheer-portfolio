@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import profileImg from './assets/profile.jpg'
 import ssmsImg from './assets/ssms.png'
+import dbtImg from './assets/dbt.svg'
+import mockitoImg from './assets/mockito.svg'
 
 /* ── Icons ─────────────────────────────────────────────────────────── */
 const LinkedInIcon = () => (
@@ -123,7 +125,7 @@ function HeroAbout() {
           <div className="hero__divider" />
 
           <div className="hero__role-row">
-            <span className="hero__role">Software Developer</span>
+            <span className="hero__role">Software & Data Engineer</span>
           </div>
 
           <div className="hero-about__bio fade-up" ref={bioRef}>
@@ -131,7 +133,7 @@ function HeroAbout() {
               Software Engineering grad from Concordia, currently at MHI RJ Aviation building production systems in C#, .NET, and React that real teams depend on. I find the most value sitting between the business problem and the technical solution, understanding what's actually needed before deciding what to build.
             </p>
             <p className="about__bio about__bio--second">
-              Alongside that, I've built Python and ML systems including a self-retraining Premier League match predictor and a live emotion recognition model deployed to production. Outside of that I play video games, follow football, and have a soft spot for Liverpool.
+              Beyond that, I build data pipelines and ML systems end-to-end: a Kafka-driven platform ingesting 9M+ NYC taxi records through DuckDB, a self-retraining Premier League predictor, and a live CNN emotion recognizer deployed to production. Outside of work I play video games, follow football, and have a soft spot for Liverpool.
             </p>
           </div>
 
@@ -192,26 +194,26 @@ const EXPERIENCES = [
     role: 'IT Developer Intern',
     period: 'May 2025 - Present',
     lead: 'Building and maintaining production systems used daily across the org - from requirements through to release.',
-    body: 'I built Sentinel, a real-time React 19 dashboard aggregating 20+ Azure DevOps repositories for engineering leadership, secured with MSAL and role-based access. I own the RFSA compliance module in SupplierDB, a Transport Canada-regulated supplier ERP supporting 100+ inspectors across 500+ global aerospace suppliers. I also maintain DMSApp, a 1.7 million-record document management system, diagnosing indexing failures and handling QA cycles and production fixes across legacy Windows Forms and ASP.NET MVC codebases.',
+    body: 'I built a React 19 / TypeScript dashboard for engineering leadership across 20+ Azure DevOps repos, secured via Azure AD / MSAL. I own a Transport Canada-compliant C# / .NET compliance module for 100+ quality inspectors across 500+ global aerospace suppliers. I also diagnosed and resolved a non-deterministic indexing failure in a 1.7 million-record Azure Cognitive Search service.',
     tags: ['React 19', 'TypeScript', 'C#', '.NET', 'ASP.NET MVC', 'ADO.NET', 'Azure', 'MSAL', 'SQL', 'Windows Forms'],
     bullets: [
-      'Eliminated manual repository monitoring for engineering leadership by building a real-time React 19 / TypeScript dashboard aggregating 20+ Azure DevOps repositories into a single view, secured via Azure AD / MSAL with role-based access control.',
-      "Closed a critical audit traceability gap in MHI's Transport Canada-regulated supplier ERP by delivering a net-new compliance module end-to-end in C# / .NET, supporting 100+ quality inspectors across 500+ global aerospace suppliers.",
-      'Diagnosed and resolved a recurring indexing failure in a 1.7 million-record document management system utilizing Azure Cognitive Search and SQL where newly onboarded organizations lost document retrieval access, tracing the root cause through free-form trigger analysis and iterative testing with no existing playbook to follow.',
-      'Kept mission-critical aviation systems continuously operational by maintaining a multi-release deployment cycle across legacy Windows Forms and modern ASP.NET MVC codebases, driving features from requirements through QA and production hotfixes.',
+      'Eliminated manual repository monitoring for engineering leadership by building a centralized React 19 / TypeScript dashboard aggregating commit activity and team membership context across 20+ Azure DevOps repositories, with automated tech stack inference per repo, secured via Azure AD / MSAL with role-based access control.',
+      'Replaced a manual, untracked supplier assessment process with a Transport Canada-compliant C# / .NET compliance module covering 9 request type workflows, automated document generation, status lifecycle tracking, and role-based access control, giving 100+ quality inspectors an auditable approval system for 500+ global aerospace suppliers.',
+      'Restored data accessibility for newly onboarded client organizations by diagnosing and resolving a non-deterministic indexing failure in an Azure Cognitive Search and SQL indexing service managing 1.7 million records.',
     ],
   },
   {
     company: 'BG Communications',
     role: 'Full-Stack Developer',
     period: 'Sep 2024 - Apr 2025',
-    lead: 'Built a full payroll platform replacement from scratch - modernizing a desktop-bound system into a deployable web application.',
-    body: 'I migrated a legacy SQL schema to a normalized relational model, writing custom transformation scripts to move historical payroll and financial records without losing data integrity. I built the replacement system end to end: a Java / Spring Boot backend containerized with Docker and a Vue.js frontend. I covered critical payroll and business logic with Selenium end-to-end test suites in Python and JUnit unit tests before each release.',
-    tags: ['Java', 'Spring Boot', 'Vue.js', 'Docker', 'Python', 'Selenium', 'JUnit', 'SQL'],
+    lead: 'Continued development on a full-stack ERP, owning the Resources module end-to-end.',
+    body: 'I took ownership of the Resources module end-to-end in a Java / Spring Boot and Next.js ERP, covering API design through frontend. I built data migration scripts and consistency checkers to move historical payroll records to a normalized schema, covered business logic with Selenium and Mockito, and led weekly stakeholder meetings.',
+    tags: ['Java', 'Spring Boot', 'Next.js', 'Docker', 'Python', 'Selenium', 'Mockito', 'SQL'],
     bullets: [
-      'Untangled and migrated a problematic legacy SQL schema to a normalized relational model, writing custom transformation scripts to move historical payroll and financial records without losing data integrity across a non-trivial structural overhaul.',
-      'Built the full replacement system from the ground up: a Java / Spring Boot backend containerized with Docker and a Vue.js frontend, modernizing a desktop-bound payroll platform into a deployable web application.',
-      'Covered critical payroll and business logic with automated end-to-end Selenium test suites in Python and structural JUnit unit tests, ensuring correctness before each release on a system handling real financial records.',
+      'Continued development of a full-stack ERP web application in Java / Spring Boot and Next.js replacing a legacy desktop platform, taking ownership of the Resources module end-to-end across backend API design and frontend implementation.',
+      'Designed and implemented data migration scripts and automated consistency checkers to transfer historical payroll and financial records from the legacy database to a normalized relational schema, verifying integrity through programmatic row count and field-level comparisons.',
+      'Covered critical business logic with Selenium end-to-end test suites and Mockito unit tests, contributing to a CI/CD pipeline that ran automated checks on every pull request across a 10-person team.',
+      'Led weekly stakeholder meetings to showcase progress and gather requirements, serving as the communication bridge between the development team and project supervisor throughout the engagement.',
     ],
   },
 ]
@@ -314,10 +316,14 @@ const TECH_STACK = [
     category: 'Cloud & Platforms',
     items: [
       { name: 'Azure',    src: DI('azure/azure-original') },
+      { name: 'Docker',   src: DI('docker/docker-original') },
+      { name: 'Kafka',    src: SI('apachekafka') },
+      { name: 'DuckDB',   src: SI('duckdb') },
+      { name: 'dbt',      src: dbtImg },
+      { name: 'Airflow',  src: SI('apacheairflow') },
       { name: 'Firebase', src: DI('firebase/firebase-original') },
       { name: 'Netlify',  src: SI('netlify') },
       { name: 'Render',   src: SI('render') },
-      { name: 'Docker',   src: DI('docker/docker-original') },
     ],
   },
   {
@@ -338,7 +344,7 @@ const TECH_STACK = [
     category: 'Testing',
     items: [
       { name: 'Jest',                  src: DI('jest/jest-plain') },
-      { name: 'JUnit',                 src: SI('junit5') },
+      { name: 'Mockito',               src: mockitoImg },
       { name: 'React Testing Library', src: SI('testinglibrary') },
     ],
   },
@@ -405,6 +411,14 @@ function Technologies() {
 /* ── Projects ────────────────────────────────────────────────────────── */
 const PROJECTS = [
   {
+    name: 'NYC Taxi Platform',
+    description: 'Airflow-orchestrated pipeline ingesting 9M+ NYC taxi records through Kafka into DuckDB, with dbt transformations and CI-enforced data quality tests on every push. A scikit-learn fare prediction model is served via FastAPI, with a React dashboard showing live trip volume, revenue trends, and a real-time fare predictor.',
+    tech: ['Kafka', 'DuckDB', 'dbt', 'Airflow', 'FastAPI', 'scikit-learn', 'React', 'GitHub Actions'],
+    github: 'https://github.com/zaheerqur/nyc-taxi-platform',
+    demo: 'https://nyc-taxi-dashboard.netlify.app/',
+    accent: '#CA8A04',
+  },
+  {
     name: 'EPL Predictor',
     description: 'Self-sustaining MLOps pipeline trained on 4,180 Premier League matches across 11 seasons, serving calibrated win/draw/loss probabilities via FastAPI. Achieves 45.3% accuracy on a held-out 2025-26 validation season and auto-retrains twice weekly via GitHub Actions.',
     tech: ['Python', 'scikit-learn', 'FastAPI', 'Docker', 'Vue.js', 'GitHub Actions', 'Render', 'Netlify'],
@@ -422,7 +436,7 @@ const PROJECTS = [
   },
   {
     name: 'CondoConnect',
-    description: 'Full-stack condo management platform with multi-role RBAC, conflict-aware facility reservations, and financial reporting. Includes a 52-file Jest / React Testing Library suite covering 68 backend functions across the Firebase data layer.',
+    description: 'Full-stack condo management platform with multi-role RBAC, conflict-aware facility reservations, and financial reporting across the full Firebase data layer. Backed by a 52-file Jest / React Testing Library suite covering 68 backend functions.',
     tech: ['React 18', 'Firebase', 'Jest', 'EmailJS', 'Google Maps API'],
     github: 'https://github.com/zaheerqur/Mini-Capstone',
     demo: null,
@@ -430,7 +444,7 @@ const PROJECTS = [
   },
   {
     name: 'Truly',
-    description: 'Full-stack career services platform with role-based access for employers, candidates, and admins. Resume upload via Cloudinary, session-based auth, and separate CI/CD pipelines for frontend and backend through GitHub Actions.',
+    description: 'Full-stack career services platform with role-based access control for employers, candidates, and admins. Features resume upload via Cloudinary, session-based authentication, and independent CI/CD pipelines for frontend and backend through GitHub Actions.',
     tech: ['Vue.js', 'Node.js', 'Express.js', 'MongoDB', 'Cloudinary', 'Jest', 'GitHub Actions'],
     github: 'https://github.com/zaheerqur/Truly',
     demo: null,
