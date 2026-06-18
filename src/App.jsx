@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import profileImg from './assets/profile.jpg'
 import ssmsImg from './assets/ssms.png'
 import dbtImg from './assets/dbt.svg'
@@ -191,7 +192,7 @@ const ChevronDown = ({ flipped }) => (
 const EXPERIENCES = [
   {
     company: 'MHI RJ Aviation',
-    role: 'IT Developer Intern',
+    role: 'IT Developer',
     period: 'May 2025 - Present',
     lead: 'Building and maintaining production systems used daily across the org - from requirements through to release.',
     body: 'I built a React 19 / TypeScript dashboard for engineering leadership across 20+ Azure DevOps repos, secured via Azure AD / MSAL. I own a Transport Canada-compliant C# / .NET compliance module for 100+ quality inspectors across 500+ global aerospace suppliers. I also diagnosed and resolved a non-deterministic indexing failure in a 1.7 million-record Azure Cognitive Search service.',
@@ -411,6 +412,20 @@ function Technologies() {
 /* ── Projects ────────────────────────────────────────────────────────── */
 const PROJECTS = [
   {
+    name: 'Supplier Quality Management System',
+    description: 'Transport Canada-compliant C# / .NET platform serving 100+ quality inspectors across 500+ global aerospace suppliers. Covers a weighted risk scoring engine, a 9-workflow RFSA approval lifecycle with automated document generation, five-tier role-based access control, and a GDI+ onsite audit calendar.',
+    tech: ['C#', '.NET', 'Windows Forms', 'SQL Server', 'Azure Blob Storage'],
+    caseStudy: '/case-study/supplierdb',
+    accent: '#9333EA',
+  },
+  {
+    name: 'Sentinel',
+    description: 'Internal engineering activity dashboard giving leadership a live, org-wide view of commit activity and team membership across 20+ Azure DevOps repositories. Frontend-only SPA authenticated against Azure AD via MSAL, with typed service modules, per-repo partial failure handling, and CI/CD through Azure Pipelines.',
+    tech: ['React 19', 'TypeScript', 'Azure AD', 'MSAL', 'Azure DevOps API'],
+    caseStudy: '/case-study/sentinel',
+    accent: '#0284C7',
+  },
+  {
     name: 'NYC Taxi Platform',
     description: 'Airflow-orchestrated pipeline ingesting 9M+ NYC taxi records through Kafka into DuckDB, with dbt transformations and CI-enforced data quality tests on every push. A scikit-learn fare prediction model is served via FastAPI, with a React dashboard showing live trip volume, revenue trends, and a real-time fare predictor.',
     tech: ['Kafka', 'DuckDB', 'dbt', 'Airflow', 'FastAPI', 'scikit-learn', 'React', 'GitHub Actions'],
@@ -489,7 +504,12 @@ function ProjectCard({ project, index, delay }) {
             Live Demo <ArrowUpRight />
           </a>
         )}
-        {!project.github && !project.demo && (
+        {project.caseStudy && (
+          <Link to={project.caseStudy} className="btn--sm btn--sm-coral-light">
+            Case Study <ArrowUpRight />
+          </Link>
+        )}
+        {!project.github && !project.demo && !project.caseStudy && (
           <span className="project-card__internal">Internal / In Progress</span>
         )}
       </div>
