@@ -160,7 +160,7 @@ function HeroAbout() {
           </div>
           <div className="hero-about__stats">
             <div className="about__stat">
-              <span className="about__stat-value">1+</span>
+              <span className="about__stat-value">2</span>
               <span className="about__stat-label">Years Experience</span>
               <span className="about__stat-sub">Software Development</span>
             </div>
